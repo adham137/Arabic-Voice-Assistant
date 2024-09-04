@@ -1,0 +1,18 @@
+Record wake words
+python .\AI-Voice-Assistant\wakeword\scripts\collect_wakeword_audio.py --sample_rate 8000 --seconds 2 --interactive --interactive_save_path .\AI-Voice-Assistant\wakeword\scripts\data\wakewords\
+
+Record enviroment sounds
+python .\AI-Voice-Assistant\wakeword\scripts\collect_wakeword_audio.py --sample_rate 8000 --save_path .\AI-Voice-Assistant\wakeword\scripts\data\environment\env.wav
+
+Replicate wake words 
+python .\AI-Voice-Assistant\wakeword\scripts\replicate_audios.py --wakewords_dir .\AI-Voice-Assistant\wakeword\scripts\data\wakewords\ --copy_destination .\AI-Voice-Assistant\wakeword\scripts\data\1\ --copy_number 50
+
+Create Jsons
+ python .\AI-Voice-Assistant\wakeword\scripts\create_wakeword_jsons.py --zero_label_dir .\AI-Voice-Assistant\wakeword\scripts\data\0\ --one_label_dir .\AI-Voice-Assistant\wakeword\scripts\data\1\ --save_json_path .\AI-Voice-Assistant\wakeword\scripts\data\
+
+Training:
+python .\AI-Voice-Assistant\wakeword\neuralnet\train.py --save_checkpoint_path .\AI-Voice-Assistant\wakeword\checkpoint\ --train_data_json .\AI-Voice-Assistant\wakeword\scripts\data\train.json --test_data_json .\AI-Voice-Assistant\wakeword\scripts\data\test.json --lr 1e-2 --epochs 25
+
+Optimization:
+python .\AI-Voice-Assistant\wakeword\neuralnet\optimize_graph.py 
+--model_checkpoint .\AI-Voice-Assistant\wakeword\checkpoint\wakeword.pt --save_path .\AI-Voice-Assistant\wakeword\optimized\model_1.pt
