@@ -17,7 +17,7 @@ from langchain.memory import ChatMessageHistory
 
 class llm:
     def __init__(self):
-        self.llm = ChatGroq(temperature=0.4, groq_api_key="", model_name="llama-3.1-70b-versatile")
+        self.llm = ChatGroq(temperature=0.4, groq_api_key="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", model_name="llama-3.1-70b-versatile")
         self.chat_history = ChatMessageHistory()
         
         self.examples = {
@@ -77,7 +77,7 @@ class llm:
             })
             self.chat_history.add_user_message(message)
             self.chat_history.add_ai_message(response['text'])
-            return response['text']
+            return response['text'].replace('###', '')
         except:
             return "اسف مسمعتش  قل مرة كمان"
 
