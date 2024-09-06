@@ -11,6 +11,9 @@ from neuralnet.dataset import get_featurizer
 from LLM import llm
 from threading import Event
 from speech import arabic_speech_to_text, text_to_speech
+from scripts.intent_model import IntentModel
+
+intent_model = IntentModel()
 
 class Listener:
 
@@ -65,13 +68,8 @@ class WakeWordEngine:
     def predict(self, audio):
         with torch.no_grad():
             fname = self.save(audio)
-            waveform, _ = torchaudio.load(fname, normalize=False)  # don't normalize on train
-            # waveform = waveform.type('torch.FloatTensor')
+            waveform, _ = torchaudio.load(fname, normalize=False) 
             mfcc = self.featurizer(waveform).transpose(1, 2).transpose(0, 1)
-
-            # TODO: read from buffer instead of saving and loading file
-            # waveform = torch.Tensor([np.frombuffer(a, dtype=np.int16) for a in audio]).flatten()
-            # mfcc = self.featurizer(waveform).transpose(0, 1).unsqueeze(1)
 
             out = self.model(mfcc)
             pred = torch.round(torch.sigmoid(out))
@@ -103,8 +101,6 @@ class DemoAction:
         wakeword is to activation.
     """
     def __init__(self, sensitivity=10):
-        # import stuff here to prevent engine.py from 
-        # importing unecessary modules during production usage
         import os
         import subprocess
         import random
@@ -130,14 +126,10 @@ class DemoAction:
             self.detect_in_row = 0
 
     def play(self):
-        # filename = self.random.choice(self.arnold_mp3)
-        # try:
-        #     print("playing", filename)
-        #     self.subprocess.check_output(['play', '-v', '.1', filename])
-        # except Exception as e:
-        #     print(str(e))
         speech_txt = arabic_speech_to_text()
-        resp_txt = self.llm.chat(speech_txt)
+        intent = intent_model.get_intent(speech_txt)
+        resp_txt = self.llm.chat(speech_txt, intent=intent)
+        print(resp_txt)
         text_to_speech(resp_txt, self.response_n)
 
 

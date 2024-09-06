@@ -120,12 +120,14 @@ def main(args):
     best_train_acc, best_train_report = 0, None
     best_test_acc, best_test_report = 0, None
     best_epoch = 0
-
+    train_acc_arr = []
+    test_acc_arr = []
     for epoch in range(args.epochs):
         print("\nstarting training with learning rate", optimizer.param_groups[0]['lr'])
         train_acc, train_report = train(train_loader, model, optimizer, loss_fn, device, epoch)
         test_acc, test_report = test(test_loader, model, device, epoch)
-
+        train_acc_arr.append(train_acc)
+        test_acc_arr.append(test_acc)
         # record best train and test
         if train_acc > best_train_acc:
             best_train_acc = train_acc
@@ -149,6 +151,23 @@ def main(args):
         # print("\ntrain acc:", train_acc, "test acc:", test_acc, "\n",
         #     "best train acc", best_train_acc, "best test acc", best_test_acc)
         print(tabulate(table))
+        
+        def chart_accuracies(train, test):
+            import matplotlib.pyplot as plt
+            epochs = range(1, len(test) + 1)
+            plt.figure(figsize=(10, 6))
+            plt.plot(epochs, train, label='Train Accuracy', marker='o')
+            plt.plot(epochs, test, label='Test Accuracy', marker='x')
+
+            # Add labels and title
+            plt.xlabel('Epochs')
+            plt.ylabel('Accuracy')
+            plt.title('LSTM Train and Test Accuracy Across Epochs')
+            plt.legend()
+
+            # Save the chart as an image
+            plt.savefig('train_test_accuracy_chart.png')
+        chart_accuracies(train_acc_arr, test_acc_arr)
 
         scheduler.step(train_acc)
 

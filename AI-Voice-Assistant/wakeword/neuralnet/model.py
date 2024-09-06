@@ -24,8 +24,6 @@ class LSTMWakeWord(nn.Module):
                 torch.zeros(n*d, batch_size, hs).to(self.device))
 
     def forward(self, x):
-        # x.shape => seq_len, batch, feature
-
         x = self.layernorm(x)
         hidden = self._init_hidden(x.size()[1])
         out, (hn, cn) = self.lstm(x, hidden)
