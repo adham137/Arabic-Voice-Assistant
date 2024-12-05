@@ -59,8 +59,5 @@ Challenges faced during development included data collection, model training, an
 
 ### Future Work and Improvements
 Potential enhancements include:
-- Improved speech recognition for dialectal variations.
 - Usage of the BERT model instead of the LSTM model for a more powerful trigger word detector.
-
-### Conclusion
-The Arabic Smart Assistant project successfully integrates machine learning and NLP to create a functional and user-friendly assistant for Arabic speakers, with plans for future enhancements to improve its capabilities.
+- Usage of Agentic design to allow for more complex features and interactions to be added.
