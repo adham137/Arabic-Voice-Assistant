@@ -1,6 +1,6 @@
 
 ## Project Title: Arabic Smart Assistant
-
+![Architecture Diagram](./image.png)
 ### Overview
 The Arabic Smart Assistant is an innovative application designed to understand and respond to spoken Arabic using advanced machine learning models and natural language processing (NLP) techniques. The system integrates various technologies to provide a seamless conversational experience for Arabic-speaking users.
 
